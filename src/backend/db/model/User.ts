@@ -1,9 +1,11 @@
 import { Model, DataTypes } from "sequelize";
 import { db } from "../sequelize";
+import { randomUUID } from "crypto";
 
 
 interface UserAttributes {
   id?: number;
+  publicId?:string,
   name: string;
   lastName: string;
   email: string;
@@ -20,6 +22,11 @@ User.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    publicId: {
+      type: DataTypes.UUID,
+      defaultValue: () => randomUUID(),
+      allowNull: true,
     },
     name: {
       type: DataTypes.STRING,

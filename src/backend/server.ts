@@ -9,6 +9,8 @@ import { authCartItems } from "./routes/auth/CartItems";
 import { authProducts } from "./routes/auth/Products";
 import { authUser } from "./routes/auth/User";
 import { comparePasswords } from "./util/bcrypt";
+import { authOrderRoutes } from "./routes/auth/Order";
+import { authCountriesRoutes } from "./routes/auth/Countries";
 
 dotenv.config();
 const { PORT, PASSPHRASE } = process.env;
@@ -29,24 +31,25 @@ const app = Express();
 app.use(json());
 
 app.use((req, res, next) => {
-  db.sync({ alter: true })
+  db.sync({ alter:true })
     .then((res) => {
       log("DB synced successfully");
       next();
     })
     .catch((err) => {
-      res.send({ message: err });
+      log("Db sync error");
+      res.status(500).send({ message: err });
     });
 });
 
 const login = async (email: string, password: string): Promise<boolean> => {
   // Find the user by email
   return await User.findOne({ where: { email: email } })
-  // User exists, verify the  password
+    // User exists, verify the  password
     .then((user) => {
       return comparePasswords(password, user!.getDataValue("password"));
     })
-    //Email 
+    //Email doesn't exit, fail the login
     .catch((err) => {
       return false;
     });
@@ -59,21 +62,25 @@ const authenticate = async (
 ) => {
   if (!req.body.auth) {
     res.status(400).send({ message: "Authorization is missing" });
+    return;
   }
   const { email, password } = req.body.auth;
 
   const isLoginValid = await login(email, password);
-
+  //Login information correct, call next function
   if (isLoginValid) {
     next();
+    //Login failed, return 401
   } else {
     res.status(401).send({ message: "Incorrect authorization information" });
   }
 };
 
-app.use("/api/products", authenticate, authProducts);
-app.use("/api/users", authenticate, authUser);
-app.use("/api/carts", authenticate, authCartItems);
+app.use("/api/admin/products", authenticate, authProducts);
+app.use("/api/admin/users", authenticate, authUser);
+app.use("/api/admin/carts", authenticate, authCartItems);
+app.use("/api/admin/orders", authenticate, authOrderRoutes);
+app.use("/api/admin/countries", authenticate, authCountriesRoutes);
 
 app.get("/", (_req, res) => {
   db.authenticate()

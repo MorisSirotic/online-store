@@ -1,20 +1,17 @@
-import { DataTypes, Model, UUIDV4 } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import { db } from "../sequelize";
 import { randomUUID } from "crypto";
 
-export interface ProductAttributes {
+export interface CountryAttributes {
   id?: number;
-  publicId?: string;
   name: string;
-  price: number;
-  stock: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  publicId?: string;
+  tax: number;
 }
 
-export class Product extends Model<ProductAttributes> {}
+export class Country extends Model<CountryAttributes> {}
 
-Product.init(
+Country.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -30,18 +27,12 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    price: {
-      type: DataTypes.DOUBLE(),
-      allowNull: false,
-    },
-    stock: {
+
+    tax: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0,
     },
   },
-  {
-    sequelize: db,
-    modelName: "Product",
-    timestamps: true,
-  }
+  { sequelize: db, modelName: "Country", timestamps: true }
 );

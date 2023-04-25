@@ -1,9 +1,7 @@
+import bcrypt from "bcrypt";
 import Router, { Request } from "express";
 import { User } from "../../db/model/User";
-import bcrypt from "bcrypt";
-import { where } from "sequelize";
 import { encryptPassword } from "../../util/bcrypt";
-import { log } from "console";
 
 interface UserData {
   id?: number;
