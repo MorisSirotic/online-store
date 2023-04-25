@@ -1,12 +1,14 @@
-import { readFileSync } from "fs";
-import https from "https";
-import Express, { NextFunction, Request, Response, json } from "express";
 import { log } from "console";
 import dotenv from "dotenv";
+import Express, { NextFunction, Request, Response, json } from "express";
+import { readFileSync } from "fs";
+import https from "https";
+import User from "./db/model/User";
 import { db } from "./db/sequelize";
+import { authCartItems } from "./routes/auth/CartItems";
 import { authProducts } from "./routes/auth/Products";
 import { authUser } from "./routes/auth/User";
-import { authCartItems } from "./routes/auth/CartItems";
+import { comparePasswords } from "./util/bcrypt";
 
 dotenv.config();
 const { PORT, PASSPHRASE } = process.env;
@@ -27,7 +29,7 @@ const app = Express();
 app.use(json());
 
 app.use((req, res, next) => {
-  db.sync({alter:true})
+  db.sync({ alter: true })
     .then((res) => {
       log("DB synced successfully");
       next();
@@ -37,25 +39,35 @@ app.use((req, res, next) => {
     });
 });
 
-const login = (email: string, password: string): boolean => {
-  return email == "moris.sirotic1@gmail.com" && password == "test123";
+const login = async (email: string, password: string): Promise<boolean> => {
+  // Find the user by email
+  return await User.findOne({ where: { email: email } })
+  // User exists, verify the  password
+    .then((user) => {
+      return comparePasswords(password, user!.getDataValue("password"));
+    })
+    //Email 
+    .catch((err) => {
+      return false;
+    });
 };
 
-const authenticate = (req: Request, res: Response, next: NextFunction) => {
-  if(!req.body.auth){
-    res.status(400).send({message: "Authorization is missing"})
+const authenticate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.body.auth) {
+    res.status(400).send({ message: "Authorization is missing" });
   }
   const { email, password } = req.body.auth;
-  //Verify the information
-  log(email);
-  log(password);
 
-  //Login incorrect, return 401
-  if (!login(email, password)) {
-    res.status(401).send("Wrong login information");
-    //Login correct, allow access
-  } else {
+  const isLoginValid = await login(email, password);
+
+  if (isLoginValid) {
     next();
+  } else {
+    res.status(401).send({ message: "Incorrect authorization information" });
   }
 };
 

@@ -1,9 +1,9 @@
 import Router, { Request } from "express";
 import { Product } from "../../db/model/Product";
- 
 
 interface ProductData {
   id?: number;
+  publicId?: string;
   name: string;
   price: number;
   stock: number;
@@ -37,6 +37,7 @@ router.put("/", (req, res) => {
 
 router.get("/", (req, res) => {
   const productData: ProductData = req.body;
+
   if (!productData.id) {
     Product.findAll()
       .then((products) => {

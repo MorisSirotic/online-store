@@ -1,5 +1,9 @@
 import Router, { Request } from "express";
 import { User } from "../../db/model/User";
+import bcrypt from "bcrypt";
+import { where } from "sequelize";
+import { encryptPassword } from "../../util/bcrypt";
+import { log } from "console";
 
 interface UserData {
   id?: number;
@@ -10,10 +14,18 @@ interface UserData {
 }
 
 const router = Router();
+router.post("/test", async (req: Request<UserData>, res) => {
+  const userData: UserData = req.body;
+  const enc = await encryptPassword(userData.password).catch((err: Error) => {
+    res.status(400).send({ message: err.message });
+  });
+
+  res.send(enc);
+});
 
 router.post("/", (req: Request<UserData>, res) => {
   const userData: UserData = req.body;
-
+  userData.password = bcrypt.hashSync(userData.password, 10);
   User.create(userData)
     .then((user) => {
       res.status(201).json(user);
@@ -52,26 +64,23 @@ router.get("/", (req, res) => {
   }
 });
 
-
 router.delete("/", (req, res) => {
-    const userData: UserData = req.body;
-  
-    User.findOne({ where: { id: userData.id } })
-      .then((user) => {
-        user
-          ?.destroy()
-          .then((r) => {
-            res.json(r);
-          })
-          .catch((err) => {
-            res.status(500).send({ message: err });
-          });
-      })
-      .catch((error) => {
-        res.status(400).send({ message: error });
-      });
-  });
+  const userData: UserData = req.body;
 
+  User.findOne({ where: { id: userData.id } })
+    .then((user) => {
+      user
+        ?.destroy()
+        .then((r) => {
+          res.json(r);
+        })
+        .catch((err) => {
+          res.status(500).send({ message: err });
+        });
+    })
+    .catch((error) => {
+      res.status(400).send({ message: error });
+    });
+});
 
-  export { router as authUser };
-
+export { router as authUser };

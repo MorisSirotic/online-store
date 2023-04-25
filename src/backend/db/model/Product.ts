@@ -1,8 +1,10 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, UUIDV4 } from "sequelize";
 import { db } from "../sequelize";
+import { randomUUID } from "crypto";
 
 export interface ProductAttributes {
   id?: number;
+  publicId?: string;
   name: string;
   price: number;
   stock: number;
@@ -18,6 +20,11 @@ Product.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    publicId: {
+      type: DataTypes.UUID,
+      defaultValue: () => randomUUID(),
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,
