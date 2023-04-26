@@ -60,7 +60,6 @@ const router = Router();
 
 router.post("/", async (req: Request<OrderData>, res) => {
   const orderData: OrderData = req.body;
-
   try {
     const order = await Order.create(orderData);
     res.status(201).json(order);

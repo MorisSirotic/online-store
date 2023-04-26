@@ -82,4 +82,4 @@ router.delete("/", (req, res) => {
     });
 });
 
-export { router as authCartItems };
+export { router as authCartItemsRoutes };

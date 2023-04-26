@@ -1,16 +1,15 @@
-import { Model, DataTypes } from "sequelize";
-import sequelize from "sequelize/types/sequelize";
+import { randomUUID } from "crypto";
+import { DataTypes, Model } from "sequelize";
+import { db } from "../sequelize";
 import { Product } from "./Product";
 import User from "./User";
-import { db } from "../sequelize";
-import { randomUUID } from "crypto";
 
 interface CartItemAttributes {
   id?: number;
   publicId?: number;
   UserId?: number;
   ProductId?: number;
-  
+
   quantity: number;
 }
 

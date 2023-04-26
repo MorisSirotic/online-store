@@ -1,11 +1,10 @@
-import { Model, DataTypes } from "sequelize";
-import { db } from "../sequelize";
 import { randomUUID } from "crypto";
-
+import { DataTypes, Model } from "sequelize";
+import { db } from "../sequelize";
 
 interface UserAttributes {
   id?: number;
-  publicId?:string,
+  publicId?: string;
   name: string;
   lastName: string;
   email: string;

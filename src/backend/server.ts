@@ -5,12 +5,14 @@ import { readFileSync } from "fs";
 import https from "https";
 import User from "./db/model/User";
 import { db } from "./db/sequelize";
-import { authCartItems } from "./routes/auth/CartItems";
-import { authProducts } from "./routes/auth/Products";
-import { authUser } from "./routes/auth/User";
-import { comparePasswords } from "./util/bcrypt";
-import { authOrderRoutes } from "./routes/auth/Order";
+import { authCartItemsRoutes } from "./routes/auth/CartItems";
+import { authCategoriesRoutes } from "./routes/auth/Category";
 import { authCountriesRoutes } from "./routes/auth/Countries";
+import { authOrderRoutes } from "./routes/auth/Order";
+import { authProductsRoutes } from "./routes/auth/Products";
+import { authUserRoutes } from "./routes/auth/User";
+import { comparePasswords } from "./util/bcrypt";
+import { authTest } from "./routes/auth/Test";
 
 dotenv.config();
 const { PORT, PASSPHRASE } = process.env;
@@ -31,7 +33,7 @@ const app = Express();
 app.use(json());
 
 app.use((req, res, next) => {
-  db.sync({ alter:true })
+  db.sync({ alter: true })
     .then((res) => {
       log("DB synced successfully");
       next();
@@ -75,12 +77,13 @@ const authenticate = async (
     res.status(401).send({ message: "Incorrect authorization information" });
   }
 };
-
-app.use("/api/admin/products", authenticate, authProducts);
-app.use("/api/admin/users", authenticate, authUser);
-app.use("/api/admin/carts", authenticate, authCartItems);
+app.use("/api/admin/test", authTest);
+app.use("/api/admin/products", authenticate, authProductsRoutes);
+app.use("/api/admin/users", authenticate, authUserRoutes);
+app.use("/api/admin/carts", authenticate, authCartItemsRoutes);
 app.use("/api/admin/orders", authenticate, authOrderRoutes);
 app.use("/api/admin/countries", authenticate, authCountriesRoutes);
+app.use("/api/admin/categories", authenticate, authCategoriesRoutes);
 
 app.get("/", (_req, res) => {
   db.authenticate()

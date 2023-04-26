@@ -72,4 +72,4 @@ router.delete("/", (req, res) => {
     });
 });
 
-export { router as authProducts };
+export { router as authProductsRoutes };

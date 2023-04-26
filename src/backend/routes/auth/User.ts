@@ -81,4 +81,4 @@ router.delete("/", (req, res) => {
     });
 });
 
-export { router as authUser };
+export { router as authUserRoutes };

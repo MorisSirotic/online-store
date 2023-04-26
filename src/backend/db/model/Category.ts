@@ -1,20 +1,22 @@
 import { randomUUID } from "crypto";
 import { DataTypes, Model } from "sequelize";
 import { db } from "../sequelize";
+import { Product } from "./Product";
 
-export interface ProductAttributes {
+export interface CategoryAttributes {
   id?: number;
   publicId?: string;
   name: string;
-  price: number;
-  stock: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  products?: Array<Product>;
 }
 
-export class Product extends Model<ProductAttributes> {}
+export class Category extends Model<CategoryAttributes> {
+  get products(): Product[] | undefined {
+    return this.getDataValue("products");
+  }
+}
 
-Product.init(
+Category.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -28,20 +30,14 @@ Product.init(
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.DOUBLE(),
-      allowNull: false,
-    },
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
   },
   {
     sequelize: db,
-    modelName: "Product",
+    modelName: "Category",
     timestamps: true,
   }
 );
+
+Product.belongsToMany(Category, { through: { model: "CategoryProduct" } });
+Category.belongsToMany(Product, { through: { model: "CategoryProduct" } });
