@@ -18,7 +18,7 @@ import { comparePasswords, encryptPassword } from "./util/bcrypt";
 
 import connectSessionSequelize from "connect-session-sequelize";
 import { Session } from "./db/model/Session";
-import { Token, csfrGenerate, csrfVerify } from "./util/csrf";
+import { Token, csfrGenerate } from "./util/csrf";
 import { csrfSecurity } from "./util/middleware/csrf";
 
 declare module "express-session" {
@@ -133,15 +133,6 @@ app.post("/api/admin/csrf/", csrfSecurity, async (req, res) => {
   req.session.csrf = token;
 
   res.send("LKKLK");
-});
-//HERE
-app.get("/api/admin/token/", async (req, res) => {
-  res.cookie("myCookieName", "myCookieValue", {
-    httpOnly: true,
-    secure: true, // set to true if using HTTPS
-    maxAge: 3600000, // cookie expiration time in milliseconds
-  });
-  res.send("Cookie set!");
 });
 
 app.use("/api/admin/auth", authenticate, authTest);
