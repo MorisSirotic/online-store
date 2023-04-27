@@ -1,4 +1,5 @@
 import { log } from "console";
+import cors from "cors";
 import dotenv from "dotenv";
 import Express, { NextFunction, Request, Response, json } from "express";
 import { readFileSync } from "fs";
@@ -10,10 +11,9 @@ import { authCategoriesRoutes } from "./routes/auth/Category";
 import { authCountriesRoutes } from "./routes/auth/Countries";
 import { authOrderRoutes } from "./routes/auth/Order";
 import { authProductsRoutes } from "./routes/auth/Products";
-import { authUserRoutes } from "./routes/auth/User";
-import { comparePasswords } from "./util/bcrypt";
 import { authTest } from "./routes/auth/Test";
-import cors from "cors";
+import { authUserRoutes } from "./routes/auth/User";
+import { comparePasswords, encryptPassword } from "./util/bcrypt";
 
 dotenv.config();
 const { PORT, PASSPHRASE } = process.env;
@@ -30,7 +30,7 @@ const options = {
 };
 
 const app = Express();
-app.use(cors({origin: "https://localhost:5173"}))
+app.use(cors({ origin: "https://localhost:5173" }));
 app.use(json());
 
 app.use((req, res, next) => {
@@ -70,15 +70,18 @@ const authenticate = async (
   const { email, password } = req.body.auth;
 
   const isLoginValid = await login(email, password);
+
   //Login information correct, call next function
   if (isLoginValid) {
+    res.locals.auth = { email, password: await encryptPassword(password) };
     next();
     //Login failed, return 401
   } else {
     res.status(401).send({ message: "Incorrect authorization information" });
   }
 };
-app.use("/api/admin/test", authenticate, authTest);
+
+app.use("/api/admin/auth", authenticate, authTest);
 app.use("/api/admin/products", authenticate, authProductsRoutes);
 app.use("/api/admin/users", authenticate, authUserRoutes);
 app.use("/api/admin/carts", authenticate, authCartItemsRoutes);

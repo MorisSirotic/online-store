@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaLock } from "react-icons/fa";
-import { axAdmin } from "../axios/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { CounterState } from "../redux/authStore";
 
 type Login = {
   email: string;
@@ -10,17 +11,26 @@ type Login = {
 export const ScreenAuth = () => {
   const [login, setLogin] = useState<Login>({ email: "", password: "" });
 
+  const count = useSelector((state: CounterState) => state.count);
+  const dispatch = useDispatch();
+
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axAdmin
-      .post("/test", {
-        auth: {
-          email: login.email,
-          password: login.password,
-        },
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err.message));
+
+    dispatch({
+      type: "LOGIN",
+      data: { email: login.email, password: login.password },
+    });
+
+    // axAdmin
+    //   .post("/auth/login", {
+    //     auth: {
+    //       email: login.email,
+    //       password: login.password,
+    //     },
+    //   })
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err.message));
   };
 
   return (
@@ -28,7 +38,7 @@ export const ScreenAuth = () => {
       <div className="flex  h-72 max-w-md flex-col items-center m-auto">
         <FaLock className="w-96 h-96 my-5 mt-10" />
 
-        <div className="flex items-center  flex-wrap">
+        <div className="flex items-center flex-wrap">
           <input
             className="mx-auto my-2 p-2"
             type="email"
@@ -43,7 +53,7 @@ export const ScreenAuth = () => {
             onChange={(e) => setLogin({ ...login, password: e.target.value })}
           />
         </div>
-
+        {count}
         <button className="w-48 p-4 bg-slate-300">Login</button>
       </div>
     </form>
