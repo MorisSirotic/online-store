@@ -1,5 +1,7 @@
 import { AxiosBasicCredentials } from "axios";
 import { axAdmin } from "../axios/axios";
+import { Sidebar } from "../components/Sidebar";
+import { Navbar } from "../components/Navbar";
 
 export const ScreenDashboard = () => {
   const credentials: AxiosBasicCredentials = {
@@ -16,5 +18,10 @@ export const ScreenDashboard = () => {
       console.log("NOT NICE");
     });
 
-  return <div className="text-green-500">Admin Dashboard</div>;
+  return (
+    <div className="flex flex-col w-full h-screen">
+      <Navbar />
+      <Sidebar />
+    </div>
+  );
 };
