@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { router } from "../../router/router";
 
 export const axAdmin = axios.create({
   baseURL: "https://localhost:3002/api/admin/",
@@ -9,7 +9,6 @@ export const axAdmin = axios.create({
   },
 });
 
-
 axAdmin.interceptors.response.use(
   (response) => {
     return response;
@@ -17,7 +16,8 @@ axAdmin.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       // Handle 401 error here
-      console.log("Correctly intercepted")
+      console.log("Correctly intercepted");
+      router.navigate("/admin/auth");
     }
     return Promise.reject(error);
   }

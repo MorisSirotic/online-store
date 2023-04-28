@@ -5,7 +5,6 @@ import Express, { NextFunction, Request, Response, json } from "express";
 import session from "express-session";
 import { readFileSync } from "fs";
 import https from "https";
-import http from "http";
 import { db } from "./db/sequelize";
 import { authCartItemsRoutes } from "./routes/auth/CartItems";
 import { authCategoriesRoutes } from "./routes/auth/Category";
@@ -17,11 +16,10 @@ import { authUserRoutes } from "./routes/auth/User";
 import { comparePasswords, encryptPassword } from "./util/bcrypt";
 
 import connectSessionSequelize from "connect-session-sequelize";
+import cookieParser from "cookie-parser";
 import { Session } from "./db/model/Session";
 import User from "./db/model/User";
-import { Token, csfrGenerate, csrfVerify } from "./util/csrf";
-import { csrfSecurity } from "./util/middleware/csrf";
-import cookieParser from "cookie-parser";
+import { Token } from "./util/csrf";
 
 declare module "express-session" {
   interface SessionData {
@@ -83,7 +81,7 @@ app.use((req, res, next) => {
   Session.sync()
     .then((mam) => {
       sessionStore.sync();
-      db.sync({ alter: true })
+      db.sync({  })
         .then((res) => {
           log("DB synced successfully");
           next();
@@ -92,7 +90,8 @@ app.use((req, res, next) => {
           log("Db sync error");
           res.status(500).send({ message: err });
         });
-    })
+    }
+    )
     .catch((err) => res.status(500).send(err));
 });
 
@@ -130,13 +129,19 @@ const authenticate = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.body.auth) {
+  if (!req.headers.authorization) {
     res.status(400).send({ message: "Authorization is missing" });
     return;
   }
-  const { email, password } = req.body.auth;
 
-  log(req.session.id);
+  const authHeader = req.headers.authorization;
+
+  const decodedCredentials = Buffer.from(
+    authHeader.split(" ")[1],
+    "base64"
+  ).toString();
+  const [email, password] = decodedCredentials.split(":");
+
   //User's session is still valid, continue
   if (req.session.user?.isLoggedIn) {
     log("valid");
@@ -169,7 +174,6 @@ const authenticate = async (
   }
 };
 
-
 //HERE
 app.get("/api/admin/csrf/", async (req, res) => {
   res.cookie("mycookie", "cookievalue", {
@@ -187,20 +191,9 @@ app.get("/api/admin/csrf/", async (req, res) => {
     log("invalid cookčinas");
     res.status(401).send({ message: "Cookie integrity failed" });
     return;
-    //res.send("pa onda je error smrade jebeni")
   }
 
   res.send(`Cookie value: ${cookieValue}`);
-
-  // res
-  //   .cookie("session", "kao signan cookie", {
-  //     path: "/",
-  //     sameSite: "none",
-  //     httpOnly: false,
-  //     secure: true,
-  //     signed: true,
-  //   })
-  //   .send("cookie set");
 });
 
 app.use("/api/admin/auth", authenticate, authTest);

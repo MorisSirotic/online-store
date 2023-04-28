@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FaLock } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { CounterState } from "../redux/authStore";
+import { useDispatch } from "react-redux";
 import { axAdmin } from "../axios/axios";
 
 type Login = {
@@ -12,7 +11,6 @@ type Login = {
 export const ScreenAuth = () => {
   const [login, setLogin] = useState<Login>({ email: "", password: "" });
 
-  const count = useSelector((state: CounterState) => state.count);
   const dispatch = useDispatch();
 
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,7 +68,7 @@ export const ScreenAuth = () => {
               onChange={(e) => setLogin({ ...login, password: e.target.value })}
             />
           </div>
-          {count}
+
           <button className="w-48 p-4 bg-slate-300">Login</button>
         </div>
       </form>

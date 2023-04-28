@@ -1,3 +1,4 @@
+import { router } from "../../router/router";
 import { authLogin } from "../services/AuthService";
 
 export interface AuthState {
@@ -25,12 +26,11 @@ export const authReducer = (
   switch (action.type) {
     case "LOGIN":
       authLogin(action.data!.email, action.data!.password)
-        .then((res: any) => {
-          console.log(res);
-          return { isLoggedIn: true, email: res.email, password: res.password };
+        .then(() => {
+          router.navigate("/admin/dashboard");
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
         });
 
       return { ...state };

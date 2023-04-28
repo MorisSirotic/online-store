@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Root } from "../common/Root";
 import { ScreenAuth } from "../admin/screens/ScreenAuth";
+import { ScreenDashboard } from "../admin/screens/ScreenDashboard";
 
 const rootLoader = () => {
   return [];
@@ -8,7 +9,7 @@ const rootLoader = () => {
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/admin",
     element: <Root />,
     loader: rootLoader,
     children: [
@@ -16,6 +17,15 @@ export const router = createBrowserRouter([
         path: "auth",
         element: (
          <ScreenAuth/>
+        ),
+        loader: () => {
+          return [];
+        },
+      },
+      {
+        path: "dashboard",
+        element: (
+         <ScreenDashboard/>
         ),
         loader: () => {
           return [];
