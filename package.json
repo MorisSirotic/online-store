@@ -18,6 +18,7 @@
     "bcrypt": "^5.1.0",
     "concurrently": "^8.0.1",
     "connect-session-sequelize": "^7.1.6",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "csrf": "^3.1.0",
     "dotenv": "^16.0.3",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
     "@types/express-session": "^1.17.7",
     "@types/node": "^18.16.0",

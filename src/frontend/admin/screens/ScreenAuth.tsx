@@ -34,19 +34,19 @@ export const ScreenAuth = () => {
     //   .catch((err) => console.log(err.message));
   };
 
+  axAdmin.interceptors.request.use((config) => {
+    console.log(config.withCredentials);
+    return config;
+  });
+
   return (
     <div>
       <button
         onClick={() => {
-         axAdmin
-      .post("/csrf", {
-        auth: {
-          email: login.email,
-          password: login.password,
-        },
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err.message));
+          axAdmin
+            .get("csrf")
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err.message));
         }}
       >
         CSRF

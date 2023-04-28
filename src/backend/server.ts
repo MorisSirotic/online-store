@@ -5,7 +5,7 @@ import Express, { NextFunction, Request, Response, json } from "express";
 import session from "express-session";
 import { readFileSync } from "fs";
 import https from "https";
-import User from "./db/model/User";
+import http from "http";
 import { db } from "./db/sequelize";
 import { authCartItemsRoutes } from "./routes/auth/CartItems";
 import { authCategoriesRoutes } from "./routes/auth/Category";
@@ -18,18 +18,28 @@ import { comparePasswords, encryptPassword } from "./util/bcrypt";
 
 import connectSessionSequelize from "connect-session-sequelize";
 import { Session } from "./db/model/Session";
-import { Token, csfrGenerate } from "./util/csrf";
+import User from "./db/model/User";
+import { Token, csfrGenerate, csrfVerify } from "./util/csrf";
 import { csrfSecurity } from "./util/middleware/csrf";
+import cookieParser from "cookie-parser";
 
 declare module "express-session" {
   interface SessionData {
-    myValue: string;
     csrf: Token;
+
+    email: string;
+    password: string;
+    isLoggedIn: boolean;
+    user: {
+      email: string;
+      password: string;
+      isLoggedIn: boolean;
+    };
   }
 }
 
 dotenv.config();
-const { PORT, PASSPHRASE, SECRETKEY } = process.env;
+const { PORT, PASSPHRASE, SECRET_KEY, COOKIE_SECRET } = process.env;
 
 const key = readFileSync("../../cert/private_key.pem");
 const cert = readFileSync("../../cert/certificate.pem");
@@ -44,20 +54,35 @@ const options = {
 
 const app = Express();
 
-app.use(cors({ origin: "https://localhost:5173" }));
+app.use(
+  cors({
+    origin: "https://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(json());
+app.use(cookieParser(COOKIE_SECRET));
+
+// app.use((req, res, next) => {
+//   res.on("finish", () => {
+//     console.log(res.getHeaders());
+//   });
+//   next();
+// });
 
 const SequelizeStore = connectSessionSequelize(session.Store);
 
 const sessionStore = new SequelizeStore({
   db: db,
   table: "Session",
-  expiration: 24 * 60 * 60 * 1000,
+  expiration: 3600000,
+  checkExpirationInterval: 37000,
 });
 
 app.use((req, res, next) => {
   Session.sync()
     .then((mam) => {
+      sessionStore.sync();
       db.sync({ alter: true })
         .then((res) => {
           log("DB synced successfully");
@@ -74,13 +99,15 @@ app.use((req, res, next) => {
 app.use(
   session({
     store: sessionStore,
-    secret: String(SECRETKEY),
+    secret: String(SECRET_KEY),
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: true, // Set to true if using HTTPS
       maxAge: 3600000, // Session expiration time in milliseconds
       httpOnly: true,
+      signed: true,
+      sameSite: "strict",
     },
   })
 );
@@ -109,30 +136,71 @@ const authenticate = async (
   }
   const { email, password } = req.body.auth;
 
+  log(req.session.id);
+  //User's session is still valid, continue
+  if (req.session.user?.isLoggedIn) {
+    log("valid");
+    next();
+    return;
+  }
+
   const isLoginValid = await login(email, password);
 
   //Login information correct, call next function
   if (isLoginValid) {
-    res.locals.auth = { email, password: await encryptPassword(password) };
+    req.session.user = {
+      isLoggedIn: true,
+      email,
+      password: await encryptPassword(password),
+    };
 
-    req.session.myValue = "Hello World";
+    res.locals.session = {
+      sessId: req.session.id,
+      isLoggedIn: true,
+    };
     next();
-    //Login failed, return 401
-  } else {
-    res.status(401).send({ message: "Incorrect authorization information" });
+  }
+
+  //Login failed, return 401
+  else {
+    log("INVALIDDDD");
+    req.session.destroy(() => {});
+    res.status(401).send("ala via");
   }
 };
+
+
 //HERE
-app.post("/api/admin/csrf/", csrfSecurity, async (req, res) => {
-  // const token = await csrfCreate();
-  // const secret = await csrfCreateSecret();
-  // const isCorrect = csrfVerify(token);
+app.get("/api/admin/csrf/", async (req, res) => {
+  res.cookie("mycookie", "cookievalue", {
+    signed: true,
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+  });
 
-  const token = await csfrGenerate();
+  log("coooooooookie");
+  log(req.signedCookies["mycookie"]);
 
-  req.session.csrf = token;
+  const cookieValue = req.signedCookies["mycookie"];
+  if (cookieValue === false) {
+    log("invalid cookčinas");
+    res.status(401).send({ message: "Cookie integrity failed" });
+    return;
+    //res.send("pa onda je error smrade jebeni")
+  }
 
-  res.send("LKKLK");
+  res.send(`Cookie value: ${cookieValue}`);
+
+  // res
+  //   .cookie("session", "kao signan cookie", {
+  //     path: "/",
+  //     sameSite: "none",
+  //     httpOnly: false,
+  //     secure: true,
+  //     signed: true,
+  //   })
+  //   .send("cookie set");
 });
 
 app.use("/api/admin/auth", authenticate, authTest);
@@ -171,3 +239,8 @@ const server = https.createServer(options, app);
 server.listen(PORT, () => {
   log(`Server running at https://localhost:${PORT} on HTTPS`);
 });
+
+// const server = http.createServer(app);
+// server.listen(PORT, () => {
+//   log(`Server running at http://localhost:${PORT} on HTTP`);
+// });
