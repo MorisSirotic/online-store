@@ -8,7 +8,7 @@ import {
 
 export const Navbar = () => {
   return (
-    <div className="flex w-full h-20  items-center bg-white">
+    <div className="flex w-full h-20  items-center bg-white text-slate-500">
       <div className="flex min-w-[200px] h-full  items-center border-b border-r-2">
         <div className="flex ">
           <FaRegBookmark className="w-10 h-10 self-center" />
@@ -30,7 +30,7 @@ export const Navbar = () => {
         </div>
 
         {/*InformationBar*/}
-        <div className="flex justify-evenly items-center ml-auto text-slate-500">
+        <div className="flex w-max justify-evenly items-center ml-auto text-slate-500">
           <div className="flex w-8 h-8 mr-2cursor-pointer  hover:bg-slate-200 rounded-full">
             <FaSun className="m-auto " />
           </div>

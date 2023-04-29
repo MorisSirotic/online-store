@@ -2,6 +2,7 @@ import { AxiosBasicCredentials } from "axios";
 import { axAdmin } from "../axios/axios";
 import { Sidebar } from "../components/Sidebar";
 import { Navbar } from "../components/Navbar";
+import { Outlet } from "react-router-dom";
 
 export const ScreenDashboard = () => {
   const credentials: AxiosBasicCredentials = {
@@ -21,7 +22,15 @@ export const ScreenDashboard = () => {
   return (
     <div className="flex flex-col w-full h-screen">
       <Navbar />
-      <Sidebar />
+
+      <div className="flex w-full h-screen ">
+        <Sidebar />
+
+        <div className="flex w-full h-screen bg-slate-100">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 };
+//top-20 left-52
