@@ -5,21 +5,20 @@ import {
   FaBox,
   FaComment,
   FaDashcube,
+  FaMoneyBill,
   FaShoppingCart,
-  FaStarOfLife,
-  FaUsers,
+  FaUsers
 } from "react-icons/fa";
 
-
 const links: Array<{ name: string; url: string; icon: IconType }> = [
-  { name: "Dashboard", url: "/dashboard/", icon: FaDashcube },
-  { name: "Orders", url: "/dashboard/orders", icon: FaShoppingCart },
-  { name: "Products", url: "/dashboard/products", icon: FaBox },
-  { name: "Customers", url: "/dashboard/customers", icon: FaUsers },
-  { name: "Statistics", url: "/dashboard/statistics", icon: FaBars },
-  { name: "Reviews", url: "/dashboard/reviews", icon: FaComment },
-  { name: "Staff", url: "/dashboard/staff", icon: FaStarOfLife },
-  { name: "Hot Offers", url: "/dashboard/hot", icon: FaAddressCard },
+  { name: "Dashboard", url: "/admin/dashboard", icon: FaDashcube },
+  { name: "Orders", url: "/admin/dashboard/orders", icon: FaShoppingCart },
+  { name: "Products", url: "/admin/dashboard/products", icon: FaBox },
+  { name: "Customers", url: "/admin/dashboard/customers", icon: FaUsers },
+  { name: "Statistics", url: "/admin/dashboard/statistics", icon: FaBars },
+  { name: "Reviews", url: "/admin/dashboard/reviews", icon: FaComment },
+  { name: "Transactions", url: "/admin/dashboard/transactions", icon: FaMoneyBill },
+  { name: "Staff", url: "/admin/dashboard/staff", icon: FaAddressCard },
 ];
 
 export const Sidebar = () => {
