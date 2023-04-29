@@ -3,7 +3,7 @@ import {
   FaChevronDown,
   FaRegBookmark,
   FaSearch,
-  FaSun
+  FaSun,
 } from "react-icons/fa";
 
 export const Navbar = () => {
@@ -24,7 +24,7 @@ export const Navbar = () => {
         <div className="flex items-center ">
           <FaSearch className="w-4 mr-2 text-slate-500" />
           <input
-            className="text-slate-300 focus:text-black"
+            className=" focus:text-black shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Search"
           ></input>
         </div>

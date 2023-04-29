@@ -1,4 +1,4 @@
-export const OrderScreen = () => {
+export const ScreenOrder = () => {
   return (
     <div className="w-full m-4">
       <div className="container mx-auto">
