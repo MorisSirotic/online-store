@@ -19,29 +19,13 @@ export const ScreenProducts = () => {
     <div className="w-full">
       <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2">
         {products.map((item) => {
-          return <ProductForm {...item} />;
+          return <ProductForm  key={item.id} {...item} />;
         })}
       </div>
     </div>
   );
 };
 
-const Product = (product: Product) => {
-  return (
-    <div key={product.id} className="flex flex-col p-4 m-2 bg-white ">
-      <span>ID: {product.id}</span>
-      <span className="w-20 overflow-hidden overflow-ellipsis whitespace-nowrap text-overflow-ellipsis">
-        Public ID: ... product.publicId
-      </span>
-      <span>{product.name}</span>
-      <span>Price: {product.price}</span>
-      <span>Stock: {product.stock}</span>
-
-      <span>Created: {new Date(product.createdAt).toLocaleString()}</span>
-      <span>Updated: {new Date(product.updatedAt).toLocaleString()}</span>
-    </div>
-  );
-};
 
 const ProductForm = (prop: Product) => {
   const [product, setProduct] = useState<Product>({
@@ -64,7 +48,7 @@ const ProductForm = (prop: Product) => {
 
   return (
     <form
-      key={product.id}
+     
       onSubmit={handleSubmit}
       className="max-w-md mx-auto p-8  bg-white  border-2"
     >
