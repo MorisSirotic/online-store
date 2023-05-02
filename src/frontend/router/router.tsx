@@ -1,11 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
-import { ScreenOrder } from "../admin/screens/ScreenOrder";
 import { ScreenAuth } from "../admin/screens/ScreenAuth";
-import { ScreenDashboard } from "../admin/screens/ScreenDashboard";
-import { Root } from "../common/Root";
-import { ScreenProducts } from "../admin/screens/ScreenProducts";
 import { ScreenCustomer } from "../admin/screens/ScreenCustomer";
+import { ScreenDashboard } from "../admin/screens/ScreenDashboard";
+import { ScreenOrder } from "../admin/screens/ScreenOrder";
+import { ScreenProducts } from "../admin/screens/ScreenProducts";
+import { ScreenReviews } from "../admin/screens/ScreenReviews";
 import { ScreenStaff } from "../admin/screens/ScreenStaff";
+import { ScreenStatistics } from "../admin/screens/ScreenStatistics";
+import { ScreenTransactions } from "../admin/screens/ScreenTransactions";
+import { Root } from "../common/Root";
 
 const rootLoader = () => {
   return [];
@@ -79,54 +82,83 @@ export const router = createBrowserRouter([
             loader: () => {
               return [
                 {
-                  id:1,
+                  id: 1,
                   type: "GUEST",
                   name: "Test Testerman",
                   email: "test@testermail.com",
                   phone: "+12345678910",
-                  totalSpent: "€55"
+                  totalSpent: "€55",
                 },
                 {
-                  id:2,
+                  id: 2,
                   type: "REGISTERED",
                   name: "Registered User",
                   email: "registered@testermail.com",
                   phone: "+12345678910",
-                  totalSpent: "€255"
+                  totalSpent: "€255",
                 },
                 {
-                  id:2,
+                  id: 2,
                   type: "REGISTERED",
                   name: "Registered User",
                   email: "registered@testermail.com",
                   phone: "+12345678910",
-                  totalSpent: "€255"
+                  totalSpent: "€255",
                 },
                 {
-                  id:2,
+                  id: 2,
                   type: "REGISTERED",
                   name: "Registered User",
                   email: "registered@testermail.com",
                   phone: "+12345678910",
-                  totalSpent: "€255"
+                  totalSpent: "€255",
                 },
                 {
-                  id:2,
+                  id: 2,
                   type: "REGISTERED",
                   name: "Registered User",
                   email: "registered@testermail.com",
                   phone: "+12345678910",
-                  totalSpent: "€255"
+                  totalSpent: "€255",
                 },
                 {
-                  id:2,
+                  id: 2,
                   type: "REGISTERED",
                   name: "Registered User",
                   email: "registered@testermail.com",
                   phone: "+12345678910",
-                  totalSpent: "€255"
-                }
+                  totalSpent: "€255",
+                },
               ];
+            },
+          },
+          {
+            path: "statistics",
+            element: <ScreenStatistics />,
+            loader: () => {
+              return [];
+            },
+          },
+          {
+            path: "reviews",
+            element: <ScreenReviews />,
+            loader: () => {
+              return [];
+            },
+          },
+          {
+            path: "transactions",
+            element: <ScreenTransactions />,
+            loader: () => {
+              return [];
+            },
+          },
+
+          {
+            path: "transactions",
+            element: <ScreenTransactions />,
+            loader: () => {
+              return [];
             },
           },
           {
@@ -139,21 +171,21 @@ export const router = createBrowserRouter([
                   name: "Moris",
                   phone: "+385123456789",
                   email: "moris.sirotic1@gmail.com",
-                  picture:"https://via.placeholder.com/400/325"
+                  picture: "https://via.placeholder.com/400/325",
                 },
                 {
                   role: "MOD",
                   name: "Mod",
                   phone: "+385123456789",
                   email: "mod@mailmail.com",
-                  picture:"https://via.placeholder.com/400/325"
+                  picture: "https://via.placeholder.com/400/325",
                 },
                 {
                   role: "MANAGER",
                   name: "Manager",
                   phone: "+385123456789",
                   email: "manager@mailmail.com",
-                  picture:"https://via.placeholder.com/400/325"
+                  picture: "https://via.placeholder.com/400/325",
                 },
               ];
             },
