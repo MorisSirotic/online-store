@@ -1,10 +1,16 @@
 import { AxiosBasicCredentials } from "axios";
+import { Outlet, useLocation } from "react-router-dom";
 import { axAdmin } from "../axios/axios";
-import { Sidebar } from "../components/Sidebar";
 import { Navbar } from "../components/Navbar";
-import { Outlet } from "react-router-dom";
+import { Sidebar } from "../components/Sidebar";
+import { ScreenRoot } from "./ScreenRoot";
 
 export const ScreenDashboard = () => {
+  const location = useLocation();
+
+  const renderRoot =
+    location.pathname == "/admin/dashboard" ? <ScreenRoot /> : <Outlet />;
+
   const credentials: AxiosBasicCredentials = {
     username: "moris.sirotic1@gmail.com",
     password: "test1233",
@@ -26,9 +32,7 @@ export const ScreenDashboard = () => {
       <div className="flex w-full h-screen ">
         <Sidebar />
 
-        <div className="flex w-full h-screen bg-slate-100">
-          <Outlet />
-        </div>
+        <div className="flex w-full h-screen bg-slate-100">{renderRoot}</div>
       </div>
     </div>
   );
