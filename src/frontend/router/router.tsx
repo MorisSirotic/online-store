@@ -5,6 +5,7 @@ import { ScreenDashboard } from "../admin/screens/ScreenDashboard";
 import { Root } from "../common/Root";
 import { ScreenProducts } from "../admin/screens/ScreenProducts";
 import { ScreenCustomer } from "../admin/screens/ScreenCustomer";
+import { ScreenStaff } from "../admin/screens/ScreenStaff";
 
 const rootLoader = () => {
   return [];
@@ -125,6 +126,35 @@ export const router = createBrowserRouter([
                   phone: "+12345678910",
                   totalSpent: "€255"
                 }
+              ];
+            },
+          },
+          {
+            path: "staff",
+            element: <ScreenStaff />,
+            loader: () => {
+              return [
+                {
+                  role: "ADMIN",
+                  name: "Moris",
+                  phone: "+385123456789",
+                  email: "moris.sirotic1@gmail.com",
+                  picture:"https://via.placeholder.com/400/325"
+                },
+                {
+                  role: "MOD",
+                  name: "Mod",
+                  phone: "+385123456789",
+                  email: "mod@mailmail.com",
+                  picture:"https://via.placeholder.com/400/325"
+                },
+                {
+                  role: "MANAGER",
+                  name: "Manager",
+                  phone: "+385123456789",
+                  email: "manager@mailmail.com",
+                  picture:"https://via.placeholder.com/400/325"
+                },
               ];
             },
           },
