@@ -1,11 +1,9 @@
 import { FormEvent } from "react";
 import {
-  FaAppStore,
   FaAtom,
   FaSearch,
-  FaShoppingBasket,
   FaShoppingCart,
-  FaUser,
+  FaUser
 } from "react-icons/fa";
 
 export const Navbar = () => {
