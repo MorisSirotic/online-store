@@ -20,6 +20,7 @@ import cookieParser from "cookie-parser";
 import { Session } from "./db/model/Session";
 import User from "./db/model/User";
 import { Token } from "./util/csrf";
+import { publicStripe } from "./routes/public/stripe";
 
 declare module "express-session" {
   interface SessionData {
@@ -195,6 +196,9 @@ app.get("/api/admin/csrf/", async (req, res) => {
 
   res.send(`Cookie value: ${cookieValue}`);
 });
+
+
+app.use("/api/stripe", publicStripe);
 
 app.use("/api/admin/auth", authenticate, authTest);
 app.use("/api/admin/products", authenticate, authProductsRoutes);

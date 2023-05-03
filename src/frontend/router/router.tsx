@@ -9,12 +9,31 @@ import { ScreenStaff } from "../admin/screens/ScreenStaff";
 import { ScreenStatistics } from "../admin/screens/ScreenStatistics";
 import { ScreenTransactions } from "../admin/screens/ScreenTransactions";
 import { Root } from "../common/Root";
+import { PublicRoot } from "../public/PublicRoot";
+import { StripeWrapper } from "../public/stripe/StripeWrapper";
+import CheckoutForm from "../public/components/CheckoutForm";
 
 const rootLoader = () => {
   return [];
 };
 
 export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <PublicRoot />,
+    loader: () => {
+      return [];
+    },
+    children: [],
+  },
+  {
+    path: "/checkout",
+    element: (
+      <StripeWrapper>
+        <CheckoutForm />
+      </StripeWrapper>
+    ),
+  },
   {
     path: "/admin",
     element: <Root />,
