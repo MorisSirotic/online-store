@@ -5,6 +5,7 @@ import {
   FaShoppingCart,
   FaUser
 } from "react-icons/fa";
+import { Link, useLoaderData } from "react-router-dom";
 
 export const Navbar = () => {
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
@@ -27,15 +28,23 @@ export const Navbar = () => {
       </form>
 
       <div className="flex w-32 shrink justify-evenly">
+
+        <Link to={"/cart"}>
         <span className="px-2 py-1 rounded-full hover:bg-stone-700">
           <FaShoppingCart className="w-10 h-10" />
         </span>
+        </Link>
+      
+
+        <Link to={"/account"}>
         <span className="px-2 py-1 rounded-full hover:bg-stone-700">
           <FaUser className="w-10 h-10" />
         </span>
+        </Link>
       </div>
+      
     </div>
   );
 };
 
-const Link = () => {};
+

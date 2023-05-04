@@ -1,4 +1,4 @@
-import { Link, useActionData, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 export type TypeProduct = {
   publicId: string;

@@ -13,6 +13,8 @@ import { PublicRoot } from "../public/PublicRoot";
 import { StripeWrapper } from "../public/stripe/StripeWrapper";
 import CheckoutForm from "../public/components/CheckoutForm";
 import { ScreenProductDetail } from "../screens/ScreenProductDetail";
+import { ScreenCart } from "../screens/ScreenCart";
+import { ScreenAccount } from "../screens/ScreenAccount";
 
 const rootLoader = () => {
   return [];
@@ -54,6 +56,32 @@ export const router = createBrowserRouter([
       {
         path: "detail",
         element: <ScreenProductDetail />,
+        loader: () => {
+          return {
+            publicId: "kmklm-lkfemk-lev-rftgr-323fgrt4bt4",
+            name: "Product Name ",
+            price: 50.0,
+            image: "https://via.placeholder.com/400/300",
+            description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostrum nemo ex officia est suscipit, culpa vitae minima expedita omnis alias laborum, veritatis debitis, molestias aliquam! Sapiente officia ea quis facere officiis accusamus excepturi vitae deserunt hic libero ducimus incidunt impedit eaque, alias modi reiciendis odit rerum, reprehenderit, quod sunt!"
+          };
+        },
+      },
+      {
+        path: "cart",
+        element: <ScreenCart />,
+        loader: () => {
+          return {
+            publicId: "kmklm-lkfemk-lev-rftgr-323fgrt4bt4",
+            name: "Product Name ",
+            price: 50.0,
+            image: "https://via.placeholder.com/400/300",
+            description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum nostrum nemo ex officia est suscipit, culpa vitae minima expedita omnis alias laborum, veritatis debitis, molestias aliquam! Sapiente officia ea quis facere officiis accusamus excepturi vitae deserunt hic libero ducimus incidunt impedit eaque, alias modi reiciendis odit rerum, reprehenderit, quod sunt!"
+          };
+        },
+      },
+      {
+        path: "account",
+        element: <ScreenAccount />,
         loader: () => {
           return {
             publicId: "kmklm-lkfemk-lev-rftgr-323fgrt4bt4",
