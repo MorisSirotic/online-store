@@ -10,12 +10,12 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="flex bg-cyan-950 text-white w-full h-12 px-4 items-center  ">
-      {/* <Link to="/">
-        <div className="flex rounded-full ">
+    <div className="flex bg-cyan-950 text-white w-full h-12 px-4 items-center">
+      <Link className="" to="/">
+        <div className="flex rounded-full mr-2">
           <FaAtom className="w-10 h-10" />
         </div>
-      </Link> */}
+      </Link>
       <form className="flex items-center" onSubmit={handleSearch}>
         <button className=" rounded-full p-2">
           <FaSearch />
@@ -32,7 +32,7 @@ export const Navbar = () => {
 
         <Link to={"/account"}>
           <span className="px-2 py-1 rounded-full ">
-            <FaUser className="w-10" />
+            <FaUser className="" />
           </span>
         </Link>
       </div>

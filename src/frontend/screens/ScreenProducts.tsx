@@ -11,7 +11,7 @@ export const ScreenProducts = () => {
   const products = useLoaderData() as Array<TypeProduct>;
 
   return (
-    <div className="flex">
+    <div className="flex min-h-[300px]">
       {products.map((prod, index) => {
         return <Product key={index} {...prod} />;
       })}
