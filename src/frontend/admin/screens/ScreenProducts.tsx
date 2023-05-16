@@ -14,18 +14,46 @@ type Product = {
 export const ScreenProducts = () => {
   const products = useLoaderData() as Product[];
 
+  const [visible, setVisible] = useState(false);
+
+  const handleShowNewProduct = () => {
+    setVisible(!visible);
+    console.log();
+  };
+
   console.log(products);
   return (
     <div className="w-full">
+      <button
+        className="bg-blue-500 text-white p-2 rounded-md"
+        onClick={handleShowNewProduct}
+      >
+        Add New
+      </button>
+
+      {visible && (
+        <div className="flex  z-10 ">
+          <div className="">
+            <ProductForm
+              id={0}
+              publicId={""}
+              name={""}
+              price={0}
+              stock={0}
+              createdAt={new Date()}
+              updatedAt={new Date()}
+            />
+          </div>
+        </div>
+      )}
       <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2">
         {products.map((item) => {
-          return <ProductForm  key={item.id} {...item} />;
+          return <ProductForm key={item.id} {...item} />;
         })}
       </div>
     </div>
   );
 };
-
 
 const ProductForm = (prop: Product) => {
   const [product, setProduct] = useState<Product>({
@@ -48,7 +76,6 @@ const ProductForm = (prop: Product) => {
 
   return (
     <form
-     
       onSubmit={handleSubmit}
       className="max-w-md mx-auto p-8  bg-white  border-2"
     >

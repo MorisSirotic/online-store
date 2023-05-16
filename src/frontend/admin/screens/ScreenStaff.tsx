@@ -22,8 +22,10 @@ export const ScreenStaff = () => {
 
 const Staff = (staff: Staff) => {
   return (
-    <div className="flex  m-2 pb-4 flex-col bg-white ">
-      <img className="w-20 rounded-full self-center" src={staff.picture} />
+    <div className="flex min-w-[200px] m-2 pb-4 flex-col bg-white ">
+      <div className="flex justify-center">
+        <img className="w-20 rounded-full" src={staff.picture} />
+      </div>
 
       <span className="flex items-center">
         <span className="mr-auto ml-2">
@@ -46,7 +48,7 @@ const Staff = (staff: Staff) => {
           <FaEnvelope />
         </span>
 
-        <span className="mr-2">{staff.email}</span>
+        <span className="mr-2 ml-2">{staff.email}</span>
       </span>
 
       <span className="flex items-center">
